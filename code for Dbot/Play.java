@@ -3,7 +3,9 @@ import LavaPlayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,13 +20,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+
 public class Play implements ICommand {
     private final AudioPlayerManager playerManager;
 
     public Play() {
         this.playerManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerLocalSource(playerManager);
+       AudioSourceManagers.registerLocalSource(playerManager);
+
     }
 
     @Override
@@ -39,11 +45,9 @@ public class Play implements ICommand {
 
     @Override
     public List<OptionData> getOptions() {
-//        while (){
-//           AudioTrackInfo info = ;
-//        }
+
         List<OptionData> options = new ArrayList<>();
-        //  String [] hello = {"ji", "13"};
+    
         options.add(new OptionData(OptionType.STRING, "name", "Name of any song", true));
         return options;
     }
@@ -54,6 +58,7 @@ public class Play implements ICommand {
         GuildMusicManager guildMusicManager = PlayerManager.get().getGuildMusicManager(event.getGuild());
         Member member = event.getMember();
         GuildVoiceState membervoiceState = member.getVoiceState();
+
         if (!membervoiceState.inAudioChannel()) {
             event.reply("You need to be in a voice channel").queue();
             return;
@@ -79,11 +84,7 @@ public class Play implements ICommand {
         }
 
         PlayerManager.get().play(channel, trackUrl);
-////        try {
-////            new URI(name);
-////        } catch (URISyntaxException e) {
-////            name = "ytsearch:" + name;
-////        }
+
 
 
         int i = 0;
@@ -91,14 +92,24 @@ public class Play implements ICommand {
         try {
             while (i != 2) {
                 if (guildMusicManager.getTrackScheduler().getPlayer().getPlayingTrack().getInfo() != null ) {
+                    //AudioTrackInfo info = guildMusicManager.getTrackScheduler().getPlayer().getPlayingTrack().getInfo();
                     AudioTrackInfo info = guildMusicManager.getTrackScheduler().getPlayer().getPlayingTrack().getInfo();
+                    AudioTrack nextTrack = null;
+                    BlockingQueue<AudioTrack> queue = guildMusicManager.getTrackScheduler().getQueue(); // Assuming a getQueue method exists
+
+                    Iterator<AudioTrack> iterator = queue.iterator();
+                    if (iterator.hasNext()) { // Skip the first element (currently playing song)
+                        nextTrack = iterator.next();
+                    }
                     EmbedBuilder embedBuilder = new EmbedBuilder();
+                    if (nextTrack != null) { // Check if there's a next song
+                        embedBuilder.addField("Next in queue:", nextTrack.getInfo().title + " by " + nextTrack.getInfo().author, false);
+                    }
                     embedBuilder.setTitle("Currently playing song");
                     embedBuilder.setDescription("NAME: " + info.title);
                     embedBuilder.appendDescription("\nAUTHOR: " + info.author);
                     embedBuilder.appendDescription("\nURL" + info.uri);
                     embedBuilder.setColor(Color.red);
-                    //   embedBuilder.setThumbnail("i.ytimg.com/vi/"+info.uri.substring());
                     net.dv8tion.jda.api.interactions.components.buttons.Button pauseButton = net.dv8tion.jda.api.interactions.components.buttons.Button.danger("pause-button", "pause");
                     net.dv8tion.jda.api.interactions.components.buttons.Button playButton = net.dv8tion.jda.api.interactions.components.buttons.Button.danger("play-button", "play");
                     net.dv8tion.jda.api.interactions.components.buttons.Button stopButton = net.dv8tion.jda.api.interactions.components.buttons.Button.danger("stop-button", "stop");
@@ -116,14 +127,3 @@ public class Play implements ICommand {
         }
 
     }
-//    private boolean isUrl(String url){
-//        try {
-//            new URL(url);
-//            return true;
-//        } catch (URISyntaxException e) {
-//            return false;
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-}
