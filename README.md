@@ -7,7 +7,9 @@
 * for AI features you must have LM studio installed for Chat feature then install any LLM in the studio and use server feature of LM studio to get the link and paste it in PromptChat code file
 * For Music Gen you must have musicgen model locally installed for how to refer HuggingFace musicgen repo. then you can run the python script using Process Builder(make sure to add python script path in MakeMusic.java file).
 * if done correctly and some specific tuning later you can run your own bot
-**OR**
+  
+*OR*
+
 NOTE: Got Docker IMAGE for this Bot, AI Features remain wrinkled but music player functions fine!
 
 * to run it install docker in your system.
