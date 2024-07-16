@@ -14,4 +14,5 @@ NOTE: Got Docker IMAGE for this Bot AI Features remain wrinkled but music player
 * and run these commands in sequence:
 * 1. docker pull premrajivdocker/dbot
 * 2. docker run premrajivdocker/dbot
-note: make sure that dbot is in your server   
+  
+Another NOTE: make sure that dbot is in your server   
