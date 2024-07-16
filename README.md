@@ -10,7 +10,7 @@
   
 2nd Method:
 
-NOTE: Got Docker IMAGE for this Bot, AI Features remain wrinkled but music player functions fine!
+NOTE: Got Docker IMAGE for this Bot, AI Features remain wrinkled (trying to fix them) but music player functions fine!
 
 * to run it install docker in your system.
 * and run these commands in sequence:
