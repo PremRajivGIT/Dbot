@@ -8,7 +8,7 @@
 * For Music Gen you must have musicgen model locally installed for how to refer HuggingFace musicgen repo. then you can run the python script using Process Builder(make sure to add python script path in MakeMusic.java file).
 * if done correctly and some specific tuning later you can run your own bot
   
-*OR*
+                    *OR*
 
 NOTE: Got Docker IMAGE for this Bot, AI Features remain wrinkled but music player functions fine!
 
